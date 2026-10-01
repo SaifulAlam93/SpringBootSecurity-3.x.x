@@ -16,7 +16,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
-@CrossOrigin(origins = "*", maxAge = 3600)
 //@PreAuthorize("hasRole('ADMIN')")  // Fixed: changed USER to ADMIN
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")  // Use hasAuthority with full name
 public class AdminController {
