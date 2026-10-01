@@ -1,5 +1,7 @@
 # Spring Boot role based security API
 
+See [API.md](API.md) for the complete endpoint reference, role matrix, DTO shapes, and Angular 17 integration examples.
+
 This API uses stateless JWT authentication and a fixed role set stored as enum values. New accounts created through `/api/auth/signup` receive `ROLE_USER`; only an administrator can assign or change roles.
 
 ## Configuration
