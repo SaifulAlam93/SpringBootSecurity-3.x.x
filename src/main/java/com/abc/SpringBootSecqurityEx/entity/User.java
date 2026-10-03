@@ -9,7 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.EnumSet;
 import java.util.Set;
 
@@ -58,11 +58,11 @@ public class User {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    private OffsetDateTime dateCreated;
+    private Instant dateCreated;
 
     @LastModifiedDate
     @Column(nullable = false)
-    private OffsetDateTime lastUpdated;
+    private Instant lastUpdated;
 
     public User(String userName, String email, String password) {
         this.userName = userName;
@@ -83,14 +83,4 @@ public class User {
         this.accountNonLocked = true;
     }
 
-    // Remove @PrePersist and @PreUpdate since you're using @EnableJpaAuditing
-     @PrePersist
-     void createdAt() {
-         this.dateCreated = this.lastUpdated = OffsetDateTime.now();
-     }
-
-     @PreUpdate
-     void updatedAt() {
-         this.lastUpdated = OffsetDateTime.now();
-     }
 }

@@ -103,7 +103,7 @@ public class UserController {
         dto.setEmail(user.getEmail());
         dto.setEnabled(user.getEnabled());
         dto.setRoles(user.getRoles());
-        dto.setDateCreated(user.getDateCreated());
+        dto.setDateCreated(user.getDateCreated().atOffset(java.time.ZoneOffset.UTC));
         return dto;
     }
 }

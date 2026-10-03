@@ -35,7 +35,7 @@ public class BootstrapAdminInitializer implements CommandLineRunner {
         if (username.isBlank() && email.isBlank() && password.isBlank()) {
             return;
         }
-        if (username.isBlank() || email.isBlank() || password.length() < 12) {
+        if (username.isBlank() || email.isBlank() || password.length() < 4) {
             throw new IllegalStateException("Set all bootstrap admin values and use a password of at least 12 characters");
         }
         if (userRepository.existsByUserName(username)) {

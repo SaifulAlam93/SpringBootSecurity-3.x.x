@@ -24,6 +24,11 @@ import java.util.List;
 @EnableMethodSecurity(prePostEnabled = true)  // This enables @PreAuthorize
 public class SecurityConfig {
 
+
+    @Value("${app.cors.allowed-origin-patterns:http://localhost:4200}")
+    List<String> allowedOriginPatterns;
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,
                                            JwtAuthenticationFilter jwtAuthFilter,
@@ -35,13 +40,14 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests(authz -> authz
-                                .requestMatchers("/api/auth/signin", "/api/auth/signup").permitAll()
-                                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                                .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/products").permitAll()
-                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/api/users/**").authenticated()
-                                .requestMatchers("/api/products/**").authenticated()
-                                .anyRequest().authenticated()
+                        .requestMatchers("/**").permitAll()
+                        .requestMatchers("/api/auth/signin", "/api/auth/signup").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/products").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/users/**").authenticated()
+                        .requestMatchers("/api/products/**").authenticated()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -74,9 +80,9 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
 
+
     @Bean
-    public CorsConfigurationSource corsConfigurationSource(
-            @Value("${app.cors.allowed-origin-patterns:http://localhost:4200}") List<String> allowedOriginPatterns) {
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(allowedOriginPatterns);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));

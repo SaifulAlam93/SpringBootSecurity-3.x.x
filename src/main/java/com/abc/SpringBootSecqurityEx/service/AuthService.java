@@ -24,17 +24,17 @@ import java.util.EnumSet;
 @Transactional
 public class AuthService {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public AuthService(AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public JwtResponse login(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
@@ -57,7 +57,7 @@ public class AuthService {
         userDTO.setEmail(user.getEmail());
         userDTO.setEnabled(user.getEnabled());
         userDTO.setRoles(user.getRoles());
-        userDTO.setDateCreated(user.getDateCreated());
+        userDTO.setDateCreated(user.getDateCreated().atOffset(java.time.ZoneOffset.UTC));
         return new JwtResponse(jwt, userDTO);
     }
 
